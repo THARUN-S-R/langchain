@@ -97,7 +97,7 @@ def get_buffer_string(
         messages: Messages to be converted to strings.
         human_prefix: The prefix to prepend to contents of HumanMessages.
             Default is "Human".
-        ai_prefix: THe prefix to prepend to contents of AIMessages. Default is "AI".
+        ai_prefix: The prefix to prepend to contents of AIMessages. Default is "AI".
 
     Returns:
         A single string concatenation of all input messages.
@@ -286,6 +286,9 @@ def _create_message_from_message_type(
         message = FunctionMessage(content=content, **kwargs)
     elif message_type == "tool":
         artifact = kwargs.get("additional_kwargs", {}).pop("artifact", None)
+        status = kwargs.get("additional_kwargs", {}).pop("status", None)
+        if status is not None:
+            kwargs["status"] = status
         message = ToolMessage(content=content, artifact=artifact, **kwargs)
     elif message_type == "remove":
         message = RemoveMessage(**kwargs)
